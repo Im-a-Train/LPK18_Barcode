@@ -1,4 +1,4 @@
-package com.company;
+package main;
 
 import java.io.*;
 public class Main
