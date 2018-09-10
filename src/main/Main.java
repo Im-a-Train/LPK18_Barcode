@@ -1,5 +1,7 @@
 package main;
 
+import db.DataConnector;
+
 import java.io.*;
 public class Main
 {
@@ -17,6 +19,7 @@ public class Main
                 System.out.println(e);
             }
             System.out.println("Your Number is: " + yourNumber);
+            System.out.println(DataConnector.getUserById(Integer.getInteger(yourNumber)).getsUserName());
         }
 
 
