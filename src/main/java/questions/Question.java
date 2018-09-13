@@ -1,12 +1,14 @@
-package Questions;
+package questions;
 
 public class Question {
+    private  Integer iQuestionId;
     private String sQuestionText;
-    private Anwser aQuestionAnwser;
 
-    public void  setaQuestionAnwser(Anwser aQuestionAnwser) {
-        this.aQuestionAnwser = aQuestionAnwser;
+    public Question(Integer iQuestionId, String sSquestionText){
+        this.iQuestionId = iQuestionId;
+        this.sQuestionText = sQuestionText;
     }
+
 
     public void setsQuestionText(String sQuestionText) {
         this.sQuestionText = sQuestionText;
@@ -16,7 +18,4 @@ public class Question {
         return sQuestionText;
     }
 
-    public Anwser getaQuestionAnwser() {
-        return aQuestionAnwser;
-    }
 }
