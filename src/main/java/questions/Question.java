@@ -18,4 +18,8 @@ public class Question {
         return sQuestionText;
     }
 
+    public int getiQuestionId(){
+        return iQuestionId;
+    }
+
 }

@@ -4,7 +4,10 @@ import com.opencsv.*;
 import questions.Question;
 import user.User;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,34 +15,67 @@ import java.nio.file.Paths;
 
 public class DataConnector {
 
-    public static String[] getLine(Integer iAttributeID, String sSearchString, String sFilePath){
+    private static CSVReader getReader(String sFilePath){
         Path myPath = Paths.get(sFilePath);
         CSVParser parser = new CSVParserBuilder().withSeparator(',').build();
+        CSVReader reader = null;
         try {
             BufferedReader br = Files.newBufferedReader(myPath,
                     StandardCharsets.UTF_8);
-            CSVReader reader = new CSVReaderBuilder(br).withCSVParser(parser).build();
-            String [] nextLine;
-            while((nextLine = reader.readNext()) !=null){
-                if(nextLine[iAttributeID].contains(sSearchString)){
-                    return nextLine;
-                }
-
-            }
-        }catch(FileNotFoundException e){
+            reader = new CSVReaderBuilder(br).withCSVParser(parser).build();
+        }catch (FileNotFoundException e){
             System.out.print(e.getMessage());
-
         }catch(IOException e){
             System.out.print(e.getMessage());
 
         }
-        return null;
+        return reader;
+    }
 
+    public static String[] getLine(Integer iAttributeID, String sSearchString, String sFilePath){
+        CSVReader reader = getReader(sFilePath);
+        String [] nextLine = null;
+        try {
+            while((nextLine = reader.readNext()) !=null){
+                if(nextLine[iAttributeID].contains(sSearchString)){
+                    break;
+                }
+            }
+        }catch(IOException e){
+            System.out.print(e.getMessage());
+        }
+        return nextLine;
+    }
+
+    public static Question getQuestionByLineNumber(Integer iLineNumber){
+        CSVReader reader = getReader("data/questions.csv");
+        String [] nextLine = null;
+        for (Integer i =0; i < iLineNumber;i++){
+            try{
+                nextLine = reader.readNext();
+            }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+
+        }
+        return new Question(Integer.parseInt(nextLine[0]),nextLine[1]);
+
+    }
+
+    public static int getNumberOfEntries(String sFilePath){
+        CSVReader reader = getReader(sFilePath);
+        Integer iNumberOfEntries =0;
+        try {
+            iNumberOfEntries = reader.readAll().size();
+        }catch(IOException e){
+            System.out.print(e.getMessage());
+        }
+        return iNumberOfEntries;
     }
     public static int getMaxIndex(String sFilePath){
         Integer iComp = 0;
+        CSVReader reader = getReader(sFilePath);
         try {
-            CSVReader reader = new CSVReader(new FileReader(sFilePath));
             String [] nextLine;
             Integer iCurrentId;
             while((nextLine = reader.readNext()) !=null){
@@ -47,14 +83,12 @@ public class DataConnector {
                 if(iCurrentId > iComp){
                     iComp = iCurrentId;
                 }
+                reader.close();
             }
-        }catch(FileNotFoundException e){
-            System.out.print(e.getMessage());
-
         }catch(IOException e){
             System.out.print(e.getMessage());
-
         }
+
         return iComp;
     }
 

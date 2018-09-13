@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.inamik.text.tables:inamik-text-tables:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/inamik/text/tables/inamik-text-tables/1.0-SNAPSHOT/inamik-text-tables-1.0-20161125.005609-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/inamik/text/tables/inamik-text-tables/1.0-SNAPSHOT/inamik-text-tables-1.0-20161125.005609-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/inamik/text/tables/inamik-text-tables/1.0-SNAPSHOT/inamik-text-tables-1.0-20161125.005609-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
