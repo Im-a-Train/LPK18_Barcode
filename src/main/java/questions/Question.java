@@ -6,7 +6,7 @@ public class Question {
 
     public Question(Integer iQuestionId, String sSquestionText){
         this.iQuestionId = iQuestionId;
-        this.sQuestionText = sQuestionText;
+        this.sQuestionText = sSquestionText;
     }
 
 

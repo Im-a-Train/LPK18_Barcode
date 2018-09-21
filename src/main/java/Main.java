@@ -17,7 +17,7 @@ public class Main
         while(run){
             Integer iCommandId =0;
             Communicator.showMenu();
-            iCommandId = InputReader.waitForIntegerInput();
+            iCommandId = InputReader.waitForIntegerInput(1,4);
             switch (iCommandId){
                 case 1:
                     QuestionMaster qm = new QuestionMaster();

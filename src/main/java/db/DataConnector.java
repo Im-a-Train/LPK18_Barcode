@@ -1,113 +1,104 @@
 package db;
 
-import com.opencsv.*;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import questions.Question;
 import user.User;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.Reader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 public class DataConnector {
 
-    private static CSVReader getReader(String sFilePath){
-        Path myPath = Paths.get(sFilePath);
-        CSVParser parser = new CSVParserBuilder().withSeparator(',').build();
-        CSVReader reader = null;
-        try {
-            BufferedReader br = Files.newBufferedReader(myPath,
-                    StandardCharsets.UTF_8);
-            reader = new CSVReaderBuilder(br).withCSVParser(parser).build();
-        }catch (FileNotFoundException e){
-            System.out.print(e.getMessage());
+    private static Iterable<CSVRecord> getRecords(String sFilePath){
+        Iterable<CSVRecord> records = null;
+        try{
+            Reader in = new FileReader(sFilePath);
+            records = CSVFormat.DEFAULT
+                .withFirstRecordAsHeader()
+                .parse(in);
         }catch(IOException e){
-            System.out.print(e.getMessage());
-
+            System.out.println("Error while reading Data.");
         }
-        return reader;
-    }
 
-    public static String[] getLine(Integer iAttributeID, String sSearchString, String sFilePath){
-        CSVReader reader = getReader(sFilePath);
-        String [] nextLine = null;
-        try {
-            while((nextLine = reader.readNext()) !=null){
-                if(nextLine[iAttributeID].contains(sSearchString)){
-                    break;
-                }
-            }
-        }catch(IOException e){
-            System.out.print(e.getMessage());
-        }
-        return nextLine;
+        return records;
     }
 
     public static Question getQuestionByLineNumber(Integer iLineNumber){
-        CSVReader reader = getReader("data/questions.csv");
-        String [] nextLine = null;
-        for (Integer i =0; i < iLineNumber;i++){
-            try{
-                nextLine = reader.readNext();
-            }catch(IOException e){
-                System.out.println(e.getMessage());
+        Iterable<CSVRecord> records = getRecords("data/questions.csv");
+        Question question = null;
+        for(CSVRecord record : records) {
+            if (record.getRecordNumber() == iLineNumber) {
+                question = new Question(Integer.parseInt(record.get("ID_Question")), record.get("QuestionText"));
+                break;
             }
-
         }
-        return new Question(Integer.parseInt(nextLine[0]),nextLine[1]);
+        return question;
 
     }
 
     public static int getNumberOfEntries(String sFilePath){
-        CSVReader reader = getReader(sFilePath);
-        Integer iNumberOfEntries =0;
-        try {
-            iNumberOfEntries = reader.readAll().size();
-        }catch(IOException e){
-            System.out.print(e.getMessage());
+        Iterable<CSVRecord> records = getRecords(sFilePath);
+        Integer iNumberOfEntries = 0;
+        for (CSVRecord record : records) {
+            iNumberOfEntries++;
         }
         return iNumberOfEntries;
     }
-    public static int getMaxIndex(String sFilePath){
-        Integer iComp = 0;
-        CSVReader reader = getReader(sFilePath);
-        try {
-            String [] nextLine;
-            Integer iCurrentId;
-            while((nextLine = reader.readNext()) !=null){
-                iCurrentId = Integer.parseInt(nextLine[0]);
-                if(iCurrentId > iComp){
-                    iComp = iCurrentId;
-                }
-                reader.close();
-            }
-        }catch(IOException e){
-            System.out.print(e.getMessage());
-        }
 
-        return iComp;
+    public static int getMaxIndex(String sFilePath){
+        Integer imaxIndex=0;
+        Iterable<CSVRecord> records = getRecords(sFilePath);
+        for(CSVRecord record : records){
+            if(Integer.getInteger(record.get(0))>imaxIndex){
+                imaxIndex = Integer.getInteger(record.get(0));
+            }
+        }
+        return imaxIndex;
     }
 
+
     public static user.User getUserById(Integer iUserId){
-        String [] parsedUser = getLine(0,iUserId.toString(), "data/users.csv");
-        return new User(Integer.parseInt(parsedUser[0]), parsedUser[1]);
+        Iterable<CSVRecord> records = getRecords("data/users.csv");
+        User user = null;
+        for (CSVRecord record : records) {
+            if (Integer.parseInt(record.get("ID_User")) == iUserId) {
+                user = new User(Integer.parseInt(record.get("ID_User")), record.get("Username"));
+                break;
+            }
+        }
+        return user;
+
     }
 
     public static questions.Question getQuestionById(Integer iQuestionId){
-        String [] parsedQuestion = getLine(0,iQuestionId.toString(),"data/questions.csv");
-        return new Question(Integer.parseInt(parsedQuestion[0]),parsedQuestion[1]);
+        Iterable<CSVRecord> records = getRecords("data/questions.csv");
+        Question question = null;
+        for(CSVRecord record : records){
+            if(Integer.parseInt(record.get("ID_Question"))==iQuestionId){
+                question = new Question(Integer.parseInt(record.get("ID_Question")), record.get("QuestionText"));
+            }
+        }
+
+        return question;
     }
 
-    public static void writeAnwser(Integer iAnwserValue, Integer iQuestionId, Integer iUserId){
+    public static void writeAnwser(Integer iAnwserValue, Integer iQuestionId, String sUsername){
         Integer iAnwserId = getMaxIndex("data/anwsers.csv")+1;
-        String [] anwserLine = {iAnwserId.toString(),iAnwserValue.toString(), iQuestionId.toString(),iUserId.toString()};
+        String [] AnwserLine = {iAnwserId.toString(),iAnwserValue.toString(), iQuestionId.toString(), sUsername};
         try{
-            CSVWriter writer = new CSVWriter(new FileWriter("data/anwsers.csv"),',');
-            writer.writeNext(anwserLine);
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get("data/anwsers.csv"), StandardOpenOption.APPEND);
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader());
+            printer.printRecord(Arrays.asList(AnwserLine));
+            printer.flush();
 
         }catch(IOException e){
             System.out.print(e.getMessage());
