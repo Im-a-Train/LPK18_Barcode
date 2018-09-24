@@ -4,20 +4,20 @@ import questions.Anwser;
 import questions.Question;
 
 public class User {
-    private int iUserID;
+    private String sUserID;
     private String sUserName;
     private Anwser[] anwUSersAnwsers;
 
-    public User(int iUserID, String sUserName){
-        this.iUserID = iUserID;
+    public User(String sUserID, String sUserName){
+        this.sUserID = sUserID;
         this.sUserName = sUserName;
     }
 
     public void anwserQuestion(Question qQuestion){
 
     }
-    public void setiUserID(int iUserID) {
-        this.iUserID = iUserID;
+    public void setsUserID(String sUserID) {
+        this.sUserID = sUserID;
     }
 
     public void setsUserName(String sUserName) {
@@ -28,8 +28,8 @@ public class User {
         return anwUSersAnwsers;
     }
 
-    public int getiUserID() {
-        return iUserID;
+    public String getsUserID() {
+        return sUserID;
     }
 
     public String getsUserName() {

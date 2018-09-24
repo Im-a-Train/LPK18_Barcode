@@ -1,7 +1,6 @@
 import cli.Communicator;
 import cli.InputReader;
 import cli.QuestionMaster;
-import db.DataConnector;
 import snake.Game;
 
 public class Main
@@ -13,7 +12,6 @@ public class Main
      */
     public static void main(String[] args){
         Boolean run = true;
-        System.out.println(DataConnector.getUserById(1).getsUserName());
         while(run){
             Integer iCommandId =0;
             Communicator.showMenu();

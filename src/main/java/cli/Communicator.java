@@ -70,15 +70,17 @@ public class Communicator {
     }
 
     public static void sayHello(String sUsername){
+        System.out.println("Hallo " + sUsername + " ");
 
     }
 
     public static void sayBye(String sUsername){
+        System.out.println("Vielen Dank für das Angenehme gespräch. Ich habe ihre Anworten gespeichert und sie können wieder ihren anderen Aufgaben nachgehen.");
 
     }
 
     public static void errorUserNotFound(){
-        System.out.println("Sorry, wir konnten mit der eingegeben ID niemanden finden.");
+        System.out.println("Sorry, wir konnten kein Subjekt mit der eingegeben ID finden.");
     }
 
 }

@@ -55,23 +55,28 @@ public class DataConnector {
     }
 
     public static int getMaxIndex(String sFilePath){
-        Integer imaxIndex=0;
+        Integer imaxIndex = 0;
         Iterable<CSVRecord> records = getRecords(sFilePath);
         for(CSVRecord record : records){
-            if(Integer.getInteger(record.get(0))>imaxIndex){
-                imaxIndex = Integer.getInteger(record.get(0));
+            try{
+                if(Integer.parseInt(record.get(0)) > imaxIndex){
+                    imaxIndex = Integer.parseInt(record.get(0));
+                }
+            }catch (Exception e){
+                System.out.println(e);
             }
+
         }
         return imaxIndex;
     }
 
 
-    public static user.User getUserById(Integer iUserId){
+    public static user.User getUserById(String sUserId){
         Iterable<CSVRecord> records = getRecords("data/users.csv");
         User user = null;
         for (CSVRecord record : records) {
-            if (Integer.parseInt(record.get("ID_User")) == iUserId) {
-                user = new User(Integer.parseInt(record.get("ID_User")), record.get("Username"));
+            if (record.get("ID_User").equals(sUserId)) {
+                user = new User(record.get("ID_User"), record.get("Username"));
                 break;
             }
         }

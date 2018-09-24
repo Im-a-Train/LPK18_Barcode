@@ -11,6 +11,7 @@ public class QuestionMaster {
     Integer iCurrentQuestionIndex = 1;
 
     public  void start() {
+
         Integer iAnwserValue;
         initUser();
         Communicator.sayHello(activeUser.getsUserName());
@@ -26,17 +27,16 @@ public class QuestionMaster {
                 System.out.println("Sorry, wir konnten die Frage mit der ID: "+iCurrentQuestionIndex+" nicht laden, wir fahren mit der nächsten fort.");
             }
             iCurrentQuestionIndex++;
-
         }
 
     }
 
     private void initUser(){
         Communicator.askForUserId();
-        activeUser = DataConnector.getUserById(InputReader.waitForIntegerInput(1, 10000000));
+        activeUser = DataConnector.getUserById(InputReader.waitForStringInput());
         while(activeUser == null){
             Communicator.errorUserNotFound();
-            activeUser = DataConnector.getUserById(InputReader.waitForIntegerInput(1, 10000000));
+            activeUser = DataConnector.getUserById(InputReader.waitForStringInput());
         }
         Communicator.sayHello(activeUser.getsUserName());
     }
