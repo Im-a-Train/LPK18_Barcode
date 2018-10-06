@@ -11,6 +11,8 @@ public final class InputReader {
         Integer yourNumber = 0;
         Scanner sc = new Scanner(System.in);
         while (yourNumber < minInt || yourNumber > maxInt) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
             System.out.print("Bitte gib eine Zahl zwischen " + minInt + " und " + maxInt + " ein: ");
             try {
                 yourNumber = sc.nextInt();

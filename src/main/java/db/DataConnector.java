@@ -70,6 +70,18 @@ public class DataConnector {
         return imaxIndex;
     }
 
+    public static void insertUserById(String sUserId, String sUserName){
+        String [] AnwserLine = {sUserId,sUserName};
+        try{
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get("data/users.csv"), StandardOpenOption.APPEND);
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader());
+            printer.printRecord(Arrays.asList(AnwserLine));
+            printer.flush();
+
+        }catch(IOException e){
+            System.out.print(e.getMessage());
+        }
+    }
 
     public static user.User getUserById(String sUserId){
         Iterable<CSVRecord> records = getRecords("data/users.csv");

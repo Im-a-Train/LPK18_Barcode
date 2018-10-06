@@ -14,7 +14,6 @@ public class QuestionMaster {
 
         Integer iAnwserValue;
         initUser();
-        Communicator.sayHello(activeUser.getsUserName());
         iNumberOfQuestions = DataConnector.getNumberOfEntries("data/questions.csv");
         System.out.println("Wir haben heute " + iNumberOfQuestions + " Fragen vorbereitet.");
         while(iCurrentQuestionIndex<=iNumberOfQuestions){

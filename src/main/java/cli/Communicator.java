@@ -6,14 +6,19 @@ import com.inamik.text.tables.grid.Border;
 import com.inamik.text.tables.grid.Util;
 import questions.Question;
 
+import java.io.*;
+
 import static com.inamik.text.tables.Cell.Functions.HORIZONTAL_CENTER;
 import static com.inamik.text.tables.Cell.Functions.TOP_ALIGN;
 
 public class Communicator {
 
     public static void showMenu(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         Integer height = 2;
         Integer width = 30;
+printAscii("ascii/Rocket_Logo");
         SimpleTable s = SimpleTable.of()
                 .nextRow()
                 .nextCell()
@@ -37,7 +42,17 @@ public class Communicator {
                 .addLine("Fertig mit Schluss")
                 .applyToCell(TOP_ALIGN        .withHeight(height))
                 .applyToCell(HORIZONTAL_CENTER.withWidth (width ))
-
+            .nextRow()
+            .nextCell()
+            .addLine("5")
+            .addLine("Erde anrufen")
+            .applyToCell(TOP_ALIGN        .withHeight(height))
+            .applyToCell(HORIZONTAL_CENTER.withWidth (width ))
+            .nextCell()
+            .addLines("6")
+            .addLines("Benutzer erfassen")
+            .applyToCell(TOP_ALIGN        .withHeight(height))
+            .applyToCell(HORIZONTAL_CENTER.withWidth (width ))
                 ;
 
 //
@@ -83,4 +98,23 @@ public class Communicator {
         System.out.println("Sorry, wir konnten kein Subjekt mit der eingegeben ID finden.");
     }
 
+    public static void printAscii(String sFilePath){
+        try{
+            FileReader fr = new FileReader(new File(sFilePath));
+            BufferedReader bf = new BufferedReader(fr);
+            String line = bf.readLine();
+            while(line != null){
+                System.out.println(line);
+                line = bf.readLine();
+            }
+            fr.close();
+
+        }catch ( IOException e){
+            System.out.println("The Graphic could not be loaded");
+            System.out.println(e.getMessage());
+        }
+
+
+
+    }
 }
